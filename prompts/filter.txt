@@ -1,0 +1,1 @@
+Specify inclusion or exclusion criteria for search results. Format is an Azure Search OData boolean expression. Example: Age le 4 or not (Age gt 8). You may only use the following fields: {filterable_fields}

@@ -1,0 +1,10 @@
+Specifies sort order for search results. Format is a comma-separated list of up to 32 order-by clauses. An order-by clause consists of a field name to order by and optional direction.
+You may only use the following fields for sorting: {sortable_fields}.
+You must generate one clause for every field you want to sort by. 
+If a direction is not specified, the default is ascending. 
+Examples:
+Query: Find the youngest employee
+Response: Age asc
+
+Query: Who is the youngest, tallest employee
+Response: Height desc, Age asc
