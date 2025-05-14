@@ -1,0 +1,9 @@
+{
+    "servers": {
+        "my-mcp-server-538a4e48": {
+            "type": "stdio",
+            "command": "bingSearchSvr.py",
+            "args": []
+        }
+    }
+}
