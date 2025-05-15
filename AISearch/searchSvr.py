@@ -7,17 +7,18 @@ from azure.core.credentials import AzureKeyCredential
 import requests
 from dotenv import load_dotenv
 
-load_dotenv(override=True)
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '.env'), override=True)
 
-def replace_fields_in_format(file_path, fields_values):
+def replace_fields_in_format(file_name, fields_values):
     try:
         # Read the format string from the file
+        file_path = os.path.join(os.path.dirname(__file__), "prompts", file_name)
         with open(file_path, 'r') as file:
             format_string = file.read()
         result = format_string.format(**fields_values)
         return result
     except FileNotFoundError:
-        print(f"Error: File not found at {file_path}")
+        print(f"Error: File not found at {file_name}")
         return None
     except KeyError as e:
         print(f"Error: Missing key in fields_values: {e}")
@@ -54,35 +55,32 @@ def search(index_name: str, query: str) -> object:
         }
         response = requests.get(url, headers=search_headers)
         if response.status_code == 200:
-            index_schema = response.json()
-        sortable_fields = ",".join([field["name"] for field in index_schema["fields"] if field["sortable"]])
-        filterable_fields =",".join([field["name"] for field in index_schema["fields"] if field["filterable"]])
-        searchable_fields = ",".join([field["name"] for field in index_schema["fields"] if field["searchable"]])
+            index_schema = json.loads(response.text)
+        sortable_fields = ",".join([field["name"] for field in index_schema["fields"] if (not field["type"].startswith("Collection")) and field["sortable"]])
+        filterable_fields =",".join([field["name"] for field in index_schema["fields"] if (not field["type"].startswith("Collection")) and field["filterable"]])
+        searchable_fields = ",".join([field["name"] for field in index_schema["fields"] if (not field["type"].startswith("Collection")) and field["searchable"]])
         prompt_fields = {
             "sortable_fields": sortable_fields,
             "filterable_fields": filterable_fields,
             "searchable_fields": searchable_fields
         }
+        sortDescription = "no sorting" if not sortable_fields else replace_fields_in_format('sortPrompt.txt', prompt_fields)
+        filterDescription = "no filtering" if not filterable_fields else replace_fields_in_format('filterPrompt.txt', prompt_fields)
+        searchDescription = replace_fields_in_format('searchPrompt.txt', prompt_fields)
+        funcDef_str = replace_fields_in_format('searchFunc.json', {
+            "sortDescription": sortDescription,
+            "filterDescription": filterDescription,
+            "searchDescription": searchDescription
+        })
+        funcDef = json.loads(funcDef_str) if funcDef_str else None        
             
-    # Get LLM client
-    openai_credential = DefaultAzureCredential()
-    token_provider = get_bearer_token_provider(openai_credential, "https://cognitiveservices.azure.com/.default")
-
+    token_provider = get_bearer_token_provider(credential, "https://cognitiveservices.azure.com/.default")
     client = AzureOpenAI(
         api_version=azure_openai_api_version,
         azure_endpoint=azure_openai_endpoint,
         api_key=azure_openai_key,
         azure_ad_token_provider=token_provider if not azure_openai_key else None
     )   
-    sortDescription = replace_fields_in_format('./prompts/sortPrompt.txt', prompt_fields)
-    filterDescription = replace_fields_in_format('./prompts/filterPrompt.txt', prompt_fields)
-    searchDescription = replace_fields_in_format('./prompts/searchPrompt.txt', prompt_fields)
-    funcDef_str = replace_fields_in_format('./prompts/searchFunc.json', {
-        "sortDescription": sortDescription,
-        "filterDescription": filterDescription,
-        "searchDescription": searchDescription
-    })
-    funcDef = json.loads(funcDef_str) if funcDef_str else None
 
     # Note that 'call_search' is a non-existent function used here so that OpenAI returns correctly formatted json object (otherwise, it returns a markdown string with a json embedded)
     # and not a string. The function is not called, but the json object is returned in the response.
@@ -95,9 +93,8 @@ def search(index_name: str, query: str) -> object:
         ],
         tools=[
             {
-                "name": "call_search",
-                "description": "Search the Azure Search index",
-                "parameters": funcDef
+                "type": "function",
+                "function":funcDef
             }
         ],
         max_tokens=1000,
