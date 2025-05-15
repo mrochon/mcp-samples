@@ -15,6 +15,7 @@ def replace_fields_in_format(file_name, fields_values):
         file_path = os.path.join(os.path.dirname(__file__), "prompts", file_name)
         with open(file_path, 'r') as file:
             format_string = file.read()
+            format_string = format_string.replace("\n", " ")
         result = format_string.format(**fields_values)
         return result
     except FileNotFoundError:
@@ -139,7 +140,7 @@ def show_help() -> str:
  # execute and return the stdio output
 if __name__ == "__main__":
     # mcp.run(transport="stdio")
-    search("deserts", "Which the largest desert in the world?")
+    search("employees", "Who is the youngest employee in marketing?")
 
 
 
