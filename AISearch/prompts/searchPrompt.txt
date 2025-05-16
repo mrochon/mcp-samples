@@ -1,0 +1,4 @@
+Analyze user prompt to extract search phrases. A search phrase is:
+- a quantity word or number followed by unit of measure, for example 'one inch'. Convert all quantities to numbers.
+- an action word followed by the subject of the action, for example: 'feed animals'.
+List search phrases as comma delimited list.

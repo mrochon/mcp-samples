@@ -1,6 +1,6 @@
 {{
     "name": "call_search",
-    "description": "Given a question, get any additional Azure Search query parameters required to answer the question. If no additional query parameters are required to answer the question, do not return any.",
+    "description": "Given a question, set additional Azure Search query parameters required to answer the question. ",
     "parameters": {{
         "type": "object",
         "properties": {{
