@@ -94,7 +94,7 @@ def search(index_name: str, query: str, justPayload: bool = False) -> object:
             }
         ],
         tool_resources={},
-        temperature=1,
+        temperature=0.2,
         top_p=1
     )
     thread = client.beta.threads.create()
@@ -134,7 +134,8 @@ def search(index_name: str, query: str, justPayload: bool = False) -> object:
     }
     if justPayload:
         return search_payload
-    url = f"https://{search_svc_name}.search.windows.net/indexes/{index_name}?api-version=2024-07-01"
+    print(json.dumps(search_payload, indent=4))
+    url = f"https://{search_svc_name}.search.windows.net/indexes/{index_name}/docs/search.post.search?api-version=2024-07-01"
     search_headers = {
         "Content-Type": "application/json",
         "Authorization": "Bearer " + credential.get_token("https://search.azure.com/.default").token,
@@ -142,8 +143,15 @@ def search(index_name: str, query: str, justPayload: bool = False) -> object:
     response = requests.post(url, headers=search_headers, data=json.dumps(search_payload))
     if response.status_code == 200:
         response_object = {
-            "answers" : response.json().get("value")
+            "answers": response.json().get("value")
         }
+    else:
+        error_message = response.json().get("error", {}).get("message", "Unknown error occurred")
+        print(f"Error: {error_message}")
+        response_object = {
+            "error": error_message
+        }
+    
     return response_object
 
 
@@ -159,7 +167,7 @@ def show_help() -> str:
  # execute and return the stdio output
 if __name__ == "__main__":
     # mcp.run(transport="stdio")
-    res = search("employees", "Employee in the marketing department with lowest age", True)
+    res = search("employees", "Youngest employee with manager title", True)
     print(res)
 
 

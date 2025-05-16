@@ -1,6 +1,6 @@
 Specify sort order for search results. Use it to retrieve data in a particular sequence. 
 Format is a comma-separated list of up to 32 order-by clauses. An order-by clause consists of a field name to order by and optional direction.
-You may only use the following fields for for specifying ordering: {sortable_fields}. 
+You may only use the following fields for for specifying ordering: {sortable_fields}. You are forbidden to use any other names.
 Generate one clause for every field you want to sort by. 
 Examples:
 Query: Find the youngest employee.
