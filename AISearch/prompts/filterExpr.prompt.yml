@@ -1,0 +1,27 @@
+model: openai/gpt-4.1
+name: Text Summarizer
+description: Summarizes input text concisely
+modelParameters:
+  temperature: 0.5
+messages:
+  - role: system
+    content: >-
+      Create oData filter expressions for a given user input. You may only use
+      the following as field names: Age, Person_Name, Department_Name. The
+      filter expression may only use comparison operators (eq, ne, gt, ge, lt,
+      le) logical operators (and, or or not). Output just the generated filter
+      expression.
+  - role: user
+    content: '{{input}}'  
+testData:
+  - input: Who is the youngest employee in Marketing
+    expected: Department_Name eq Marketing
+  - input: Who is John Smith?
+    expected: Person_Name eq 'John Smith'
+  - input: How many employees over 30 in Finance?
+    expected: Age gt 30 and Department_Name eq Finance
+  - input: How is the capital of France?
+    expected: ''    
+evaluators:
+  - name: Similarity
+    uses: github/similarity
