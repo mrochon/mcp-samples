@@ -7,5 +7,15 @@ messages:
       le) logical operators (and, or or not). Output just the generated filter
       expression.
   - role: user
-    content: Who is the youngest employee in Marketing?
+    content: '{{input}}'
 model: openai/gpt-4.1
+testData:
+  - input: Who is the youngest employe in Marketing
+    expected: Department_Name eq Marketing
+  - input: Who is John Smith?
+    expected: Person_Name eq 'John Smith'
+  - input: How many employees over 30 in Finance?
+    expected: Age gt 30 and Department_Name eq Finance
+evaluators:
+  - name: Similarity
+    uses: github/similarity
