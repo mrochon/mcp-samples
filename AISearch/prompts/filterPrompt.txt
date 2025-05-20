@@ -1,5 +1,5 @@
-Specify inclusion or exclusion criteria for search results by using OData boolean expression for field which specifically allow filtering. 
-You may only use the following fields: {filterable_fields} to filter on. If a field name is not in the list, do not use it as filter.
-First, identify words or terms in the user query which can be categorized by a name in list of allowed filter fields. Do not use a name unless it is clearly related to the value.
-If you find such field name, construct a filter with that field name and the value it categorizes.
-If you do not find such a field, do not construct filter for that value.
+Create oData filter expressions for a given user input. You may only use 
+the following as field names: Age, Person_Name, Department_Name. The 
+filter expression may only use comparison operators (eq, ne, gt, ge, lt, 
+le) logical operators (and, or or not). Output just the generated filter 
+expression. 

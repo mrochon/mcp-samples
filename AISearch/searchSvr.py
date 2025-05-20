@@ -61,6 +61,9 @@ def search(index_name: str, query: str, justPayload: bool = False) -> object:
         sortable_fields = ", ".join([field["name"] for field in index_schema["fields"] if (not field["type"].startswith("Collection")) and field["sortable"]])
         filterable_fields =", ".join([field["name"] for field in index_schema["fields"] if (not field["type"].startswith("Collection")) and field["filterable"]])
         searchable_fields = ", ".join([field["name"] for field in index_schema["fields"] if (not field["type"].startswith("Collection")) and field["searchable"]])
+        
+        filterable_fields = "ID, Department_Name, Person_Name"
+        
         prompt_fields = {
             "sortable_fields": sortable_fields,
             "filterable_fields": filterable_fields,
@@ -167,7 +170,7 @@ def show_help() -> str:
  # execute and return the stdio output
 if __name__ == "__main__":
     # mcp.run(transport="stdio")
-    res = search("employees", "Youngest employee with manager title", True)
+    res = search("employees", "Youngest employee in the Marketing department with manager title", True)
     print(res)
 
 

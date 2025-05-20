@@ -1,0 +1,91 @@
+{
+    "input": [
+        {
+            "role": "system",
+            "content": "Create oData filter expressions for a given user input. You may only use the following as field names: Age, Department_Name, Person_Name."
+        },
+        {
+            "role": "user",
+            "content": "What is the age of John?"
+        }
+    ],
+    "output": "Person_Name eq John"
+}
+{
+    "input": [
+        {
+            "role": "system",
+            "content": "Create oData filter expressions for a given user input. You may only use the following as field names: Age, Department_Name, Person_Name."
+        },
+        {
+            "role": "user",
+            "content": "Get all people with name 'Smith' who are in the Finance Department"
+        }
+    ],
+    "output": "Person_Name eq Smith and Department_Name eq Finance"
+}
+{
+    "input": [
+        {
+            "role": "system",
+            "content": "Create oData filter expressions for a given user input. You may only use the following as field names: Age, Department_Name, Person_Name."
+        },
+        {
+            "role": "user",
+            "content": "What is the age of the oldest employee?"
+        }
+    ],
+    "output": ""
+}
+{
+    "input": [
+        {
+            "role": "system",
+            "content": "Create oData filter expressions for a given user input. You may only use the following as field names: Age, Department_Name, Person_Name."
+        },
+        {
+            "role": "user",
+            "content": "What is the name of the person with ID 123?"
+        }
+    ],
+    "output": ""
+}
+{
+    "input": [
+        {
+            "role": "system",
+            "content": "Create oData filter expressions for a given user input. You may only use the following as field names: Age, Department_Name, Person_Name."
+        },
+        {
+            "role": "user",
+            "content": "List all employees in the HR department"
+        }
+    ],
+    "output": "Department_Name eq HR"
+}
+{
+    "input": [
+        {
+            "role": "system",
+            "content": "Create oData filter expressions for a given user input. You may only use the following as field names: Age, Department_Name, Person_Name."
+        },
+        {
+            "role": "user",
+            "content": "How many employees are there in total?"
+        }
+    ],
+    "output": ""
+}
+{
+    "input": [
+        {
+            "role": "system",
+            "content": "Create oData filter expressions for a given user input. You may only use the following as field names: Age, Department_Name, Person_Name."
+        },
+        {
+            "role": "user",
+            "content": "What is the average salary of employees in the IT department?"
+        }
+    ],
+    "output": ""
+}
