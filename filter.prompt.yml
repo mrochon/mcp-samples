@@ -1,0 +1,11 @@
+messages:
+  - role: system
+    content: >-
+      Create oData filter expressions for a given user input. You may only use
+      the following as field names: Age, Department_Name, Person_Name. The
+      filter expression may only use comparison operators (eq, ne, gt, ge, lt,
+      le) logical operators (and, or or not). Output just the generated filter
+      expression.
+  - role: user
+    content: Who is the youngest employee in Marketing?
+model: openai/gpt-4.1
